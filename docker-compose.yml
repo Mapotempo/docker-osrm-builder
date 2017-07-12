@@ -1,34 +1,34 @@
 version: '2'
 services:
-    builder:
-      build: .
-      image: mapotempo/osrm-builder:${OSRM_VERSION:-latest}
-      environment:
-        - REGION
-        - PROFILE
-        - NAME
-        - ADDITIONAL_PARAMS
-      volumes:
-        - ./osm:/srv/osm
-        - ./data:/srv/osrm/data
-        - ./profiles:/srv/osrm/profiles
-        - ./scripts:/srv/osrm/regions
-      links:
-        - redis-cache
-        - db
+  builder:
+    build: .
+    image: mapotempo/osrm-builder:${OSRM_VERSION:-latest}
+    environment:
+      - REGION
+      - PROFILE
+      - NAME
+      - ADDITIONAL_PARAMS
+    volumes:
+      - ./osm:/srv/osm
+      - ./data:/srv/osrm/data
+      - ./profiles:/srv/osrm/profiles
+      - ./scripts:/srv/osrm/regions
+    links:
+      - redis-cache
+      - db
 
-    db:
-      build: ./postgres
-      image: mapotempo/postgres:9.6
-      environment:
-        POSTGRES_DB: osrm
-        POSTGRES_USER: osrm
-        POSTGRES_PASSWORD: osrm
-      volumes:
-        - postgres-9.6:/var/lib/postgres
+  db:
+    build: ./postgres
+    image: mapotempo/postgres:9.6
+    environment:
+      POSTGRES_DB: osrm
+      POSTGRES_USER: osrm
+      POSTGRES_PASSWORD: osrm
+    volumes:
+      - postgres-9.6:/var/lib/postgres
 
-    redis-cache:
-      image: redis:${REDIS_VERSION:-3.2-alpine}
+  redis-cache:
+    image: redis:${REDIS_VERSION:-3.2-alpine}
 
 volumes:
   postgres-9.6:
