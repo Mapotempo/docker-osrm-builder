@@ -10,7 +10,7 @@ WORKSPACE=$(dirname ${TARGET})
 
 OSM_DATADIR=/srv/osm
 
-if [ -r ${target} ]; then
+if [ -r ${TARGET} ]; then
     echo "OSM file for region DOM already exists."
     exit
 fi
