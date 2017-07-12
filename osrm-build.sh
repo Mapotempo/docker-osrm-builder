@@ -241,7 +241,7 @@ done
 shift $((OPTIND-1))
 
 # Profile path resolution
-if [[ "${PROFILE}" = "/*" ]]; then
+if [[ "${PROFILE}" == /* ]]; then
     PROFILE_PATH=${PROFILE}
 else
     PROFILE_PATH="/srv/osrm/profiles/${PROFILE}"
