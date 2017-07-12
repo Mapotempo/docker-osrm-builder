@@ -144,7 +144,7 @@ cleanup_link() {
     local target=$(readlink -e ${link})
 
     echo "Cleaning target files: ${target}*"
-    rm -vf ${target}*
+    [[ -n "${target}" ]] && rm -vf ${target}*
 
     echo "Cleaning link: ${link}"
     rm -vf ${link}
