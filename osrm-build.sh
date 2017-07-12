@@ -152,7 +152,7 @@ cleanup_link() {
 
 prepare_locations() {
     local input=$1
-    local ouput=$2
+    local output=$2
 
     if [ ! -r ${output} ]; then
         echo "Add locations to ways using Osmium on ${input}, writing to ${output}."
