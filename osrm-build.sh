@@ -69,7 +69,7 @@ build_osm(){
         else
             # Build OSM data in target file.
             echo "Build OSM data for region \"${REGION_FULL}\"."
-            ${BUILD_OSM_FUNCTION} ${target}
+            ${REGION_SCRIPT} ${target}
         fi
     else
         echo "Call build_osm_generic for region \"${REGION_FULL}\"."
