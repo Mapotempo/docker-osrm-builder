@@ -83,7 +83,7 @@ build_osm_generic(){
     local REGION_FULL=$1
     local REGION=$(basename ${REGION_FULL})
 
-    local OSM_ORIGIN=$(readlink -f /srv/osm/${REGION_FULL}/${REGION}-latest.osm.pbf)
+    local OSM_ORIGIN=$(readlink -m /srv/osm/${REGION_FULL}/${REGION}-latest.osm.pbf)
 
     if [ -r ${OSM_ORIGIN} ]; then
         echo "OSM file for region ${REGION} already exists."
