@@ -27,58 +27,6 @@ EOF
     exit 1
 }
 
-# Build OSM file for DOM-TOMs
-build_osm_dom_extended(){
-    local target=$1
-    local workspace=$(dirname ${target})
-
-    local region="dom"
-
-    local OSM_DATADIR=/srv/osm
-
-    if [ -r ${target} ]; then
-        echo "OSM file for region DOM already exists."
-        return
-    fi
-
-    echo "Building extended DOM OSM file."
-    mkdir -p ${workspace}
-
-    local extract_region_full
-
-    # Get OSM files
-    for extract_region_full in \
-        europe/france/guadeloupe \
-        europe/france/martinique \
-        europe/france/guyane \
-        europe/france/reunion \
-        europe/france/mayotte \
-        australia-oceania/new-caledonia
-    do
-        osm-manage.sh ${extract_region_full} || die "Impossible to get ${extract_region_full}."
-    done
-
-    # merge with osmosis
-    echo "Merging OSM files using osmosis."
-    #export JAVACMD_OPTIONS="-Djava.io.tmpdir=${DATADIR}/france/"
-    export JAVACMD_OPTIONS="-Xms4G -Xmx8G -Djava.io.tmpdir=${workspace}"
-    export OSMOSIS_OPTIONS="-v"
-    osmosis \
-        --read-pbf ${OSM_DATADIR}/europe/france/guadeloupe/guadeloupe-latest.osm.pbf \
-        --read-pbf ${OSM_DATADIR}/europe/france/martinique/martinique-latest.osm.pbf \
-        --read-pbf ${OSM_DATADIR}/europe/france/guyane/guyane-latest.osm.pbf \
-        --read-pbf ${OSM_DATADIR}/europe/france/reunion/reunion-latest.osm.pbf \
-        --read-pbf ${OSM_DATADIR}/europe/france/mayotte/mayotte-latest.osm.pbf \
-        --read-pbf ${OSM_DATADIR}/australia-oceania/new-caledonia/new-caledonia-latest.osm.pbf \
-        --merge --merge --merge --merge --merge \
-        --buffer --write-pbf ${target}
-
-    if [ $? -ne 0 ]; then
-        rm -f ${target}
-        die "Unable to merge regions."
-    fi
-}
-
 build_osm_generic(){
     local REGION_FULL=$1
     local REGION=$(basename ${REGION_FULL})
@@ -99,16 +47,17 @@ build_osm(){
 
     local target=$2
 
-    local BUILD_OSM_FUNCTION="build_osm_${REGION}_extended"
+    local REGION_SCRIPT_DIR=/srv/osrm/regions
+    local REGION_SCRIPT=${REGION_SCRIPT_DIR}/${REGION_FULL}.sh
 
-    if type -t ${BUILD_OSM_FUNCTION} >/dev/null 2>&1; then
-        echo "Call specific build function for region \"${REGION_FULL}\"."
+    if [[ -x ${REGION_SCRIPT} ]]; then
+        echo "Call specific build script for region \"${REGION_FULL}\"."
         if [ "${ADD_LOCATIONS}" -eq 1 ]; then
             local intermediate=$(mktemp -u)
 
             # Build OSM data in intermediate file.
             echo "Build temporaty OSM data for region \"${REGION_FULL}\"."
-            ${BUILD_OSM_FUNCTION} ${intermediate}
+            ${REGION_SCRIPT} ${intermediate}
 
             # Build OSM data with locations in target file.
             echo "Build OSM data with locations for region \"${REGION_FULL}\"."
