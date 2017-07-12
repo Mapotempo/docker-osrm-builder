@@ -6,15 +6,13 @@ die() {
 }
 
 TARGET=$1
-WORKSPACE=$(dirname ${target})
-
-REGION="dom"
+WORKSPACE=$(dirname ${TARGET})
 
 OSM_DATADIR=/srv/osm
 
 if [ -r ${target} ]; then
     echo "OSM file for region DOM already exists."
-    return
+    exit
 fi
 
 echo "Building extended DOM OSM file."
@@ -46,9 +44,9 @@ osmosis \
     --read-pbf ${OSM_DATADIR}/europe/france/mayotte/mayotte-latest.osm.pbf \
     --read-pbf ${OSM_DATADIR}/australia-oceania/new-caledonia/new-caledonia-latest.osm.pbf \
     --merge --merge --merge --merge --merge \
-    --buffer --write-pbf ${target}
+    --buffer --write-pbf ${TARGET}
 
 if [ $? -ne 0 ]; then
-    rm -f ${target}
+    rm -f ${TARGET}
     die "Unable to merge regions."
 fi
