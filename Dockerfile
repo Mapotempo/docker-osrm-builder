@@ -27,6 +27,10 @@ RUN apt-get update && \
     mkdir -p /usr/share/lua/5.2 && \
     cp -r ../profiles/lib /usr/share/lua/5.2 && \
     \
+# Copy OSRM profiles
+    mkdir -p /usr/share/osrm/profiles
+    cp ../profiles/*.lua /usr/share/osrm/profiles
+    \
 # Cleanup build directory
     cd / && rm -rf osrm-backend &&\
     \
