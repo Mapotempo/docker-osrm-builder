@@ -47,19 +47,34 @@ database:
 Running the builder
 -------------------
 
-In the following, `${PROFILE}` must be replaced by the profile name,
-`${REGION}` by the region name like `france`, and `${REGION_PATH}` by the
-region path on Geofrabrik like `europe/france`.
+In the following, you may replace the variable values by your own needs.
+The PROFILE variable contains the OSRM profile file path. If the profile is in profiles
+volume, you just have to set the profile file name. If you want to use a OSRM provided profile, they are located in `/usr/share/osrm/profiles`.
+The REGION variable contains the name of the region. It may by a path pointing to
+a region defined in Geofabrik.
+The NAME variable contains the generated OSRM base name.
+The ADDITIONAL_PARAMS variable contains one or more of the following arguments:
+  - -c to cleanup data
+  - -f to cleanup data even if it the the one currently generated
+  - -a to add locations to ways in OSM file
 
 Before running the builder we also need a profile in `docker/osrm/profiles/`.
 The profile must follow the name scheme: `profile-${PROFILE}.lua`.
 
 To run a build, enter the following command:
 
-    docker-compose -p builder -f docker-compose.builder.yml run builder \
-        /usr/bin/osrm-build.sh -p ${PROFILE} -r ${REGION_PATH}
+    PROFILE="/usr/share/osrm/profiles/foot.lua" \
+    REGION="europe/france/corse" \
+    NAME="foot-corse" \
+    ADDITIONAL_PARAMS="-c -f" \
+    docker-compose -p builder up builder
 
-The data will be generated in `./osrm/data`.
+The data will be generated in `./data`.
+
+Copy the data to another server
+-------------------------------
+
+TODO
 
 Reload the data
 ---------------
