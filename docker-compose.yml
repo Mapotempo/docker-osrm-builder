@@ -12,6 +12,7 @@ services:
         - ./osm:/srv/osm
         - ./data:/srv/osrm/data
         - ./profiles:/srv/osrm/profiles
+        - ./scripts:/srv/osrm/regions
       links:
         - redis-cache
         - db
