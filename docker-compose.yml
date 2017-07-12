@@ -2,7 +2,7 @@ version: '2'
 services:
     builder:
       build: .
-      image: mapotempo/osrm-builder:latest
+      image: mapotempo/osrm-builder:${OSRM_VERSION:-latest}
       environment:
         - REGION
         - PROFILE
@@ -28,7 +28,7 @@ services:
         - postgres-9.6:/var/lib/postgres
 
     redis-cache:
-      image: redis:3.2-alpine
+      image: redis:${REDIS_VERSION:-3.2-alpine}
 
 volumes:
   postgres-9.6:
