@@ -62,6 +62,7 @@ VOLUME /srv/osm
 
 ENV REGION ""
 ENV PROFILE ""
+ENV NAME ""
 ENV ADDITIONAL_PARAMS ""
 
-CMD /usr/bin/osrm-build.sh -p ${PROFILE} -r ${REGION} ${ADDITIONAL_PARAMS}
+CMD /usr/bin/osrm-build.sh -p ${PROFILE} -r ${REGION} -n ${NAME} ${ADDITIONAL_PARAMS}
