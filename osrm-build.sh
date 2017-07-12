@@ -104,7 +104,7 @@ build_osm(){
     if type -t ${BUILD_OSM_FUNCTION} >/dev/null 2>&1; then
         echo "Call specific build function for region \"${REGION_FULL}\"."
         if [ "${ADD_LOCATIONS}" -eq 1 ]; then
-            local intermediate=$(mktemp)
+            local intermediate=$(mktemp -u)
 
             # Build OSM data in intermediate file.
             echo "Build temporaty OSM data for region \"${REGION_FULL}\"."
