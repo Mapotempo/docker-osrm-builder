@@ -48,24 +48,38 @@ Running the builder
 -------------------
 
 In the following, you may replace the variable values by your own needs.
-The PROFILE variable contains the OSRM profile file path. If the profile is in profiles
-volume, you just have to set the profile file name. If you want to use a OSRM provided profile, they are located in `/usr/share/osrm/profiles`.
+
+The PROFILE variable contains the OSRM profile file path.
+If the profile is in profiles volume, you only have to set the profile file
+name.
+If you want to use a OSRM provided profile, you must set the absolute name of
+the profile located in `/usr/share/osrm/profiles`.
+
 The REGION variable contains the name of the region. It may by a path pointing to
 a region defined in Geofabrik.
+
 The NAME variable contains the generated OSRM base name.
+
 The ADDITIONAL_PARAMS variable contains one or more of the following arguments:
   - -c to cleanup data
   - -f to cleanup data even if it the the one currently generated
   - -a to add locations to ways in OSM file
 
-Before running the builder we also need a profile in `docker/osrm/profiles/`.
-The profile must follow the name scheme: `profile-${PROFILE}.lua`.
 
 To run a build, enter the following command:
 
     PROFILE="/usr/share/osrm/profiles/foot.lua" \
     REGION="europe/france/corse" \
     NAME="foot-corse" \
+    ADDITIONAL_PARAMS="-c -f" \
+    docker-compose -p builder up builder
+
+To use the custom overseas OSM file build script, and a profile in `profiles`
+directory:
+
+    PROFILE="profile-car.lua" \
+    REGION="europe/france/overseas" \
+    NAME="car-overseas" \
     ADDITIONAL_PARAMS="-c -f" \
     docker-compose -p builder up builder
 
