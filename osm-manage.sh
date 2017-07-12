@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Ansible managed: Don't modify this file here because your changes will be erased by ansible.
-
 # Constants
 OSM_BASE_DIR="/srv/osm"
 GEOFABRIK_URL="http://download.geofabrik.de"
