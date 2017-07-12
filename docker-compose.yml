@@ -3,10 +3,15 @@ services:
     builder:
       build: .
       image: mapotempo/osrm-builder:latest
+      environment:
+        - REGION
+        - PROFILE
+        - NAME
+        - ADDITIONAL_PARAMS
       volumes:
         - ./osm:/srv/osm
-        - ./osrm/data:/srv/osrm/data
-        - ./osrm/profiles:/srv/osrm/profiles
+        - ./data:/srv/osrm/data
+        - ./profiles:/srv/osrm/profiles
       links:
         - redis-cache
         - db
