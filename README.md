@@ -42,7 +42,7 @@ Initializing the builder database
 Before running the builder on profile `car`, we need to initialize the
 database:
 
-    TODO Alexis Lahouze 2017-06-30 
+    TODO Alexis Lahouze 2017-06-30
 
 Running the builder
 -------------------
@@ -65,12 +65,11 @@ The ADDITIONAL_PARAMS variable contains one or more of the following arguments:
   - -f to cleanup data even if it the the one currently generated
   - -a to add locations to ways in OSM file
 
-
 To run a build, enter the following command:
 
-    PROFILE="/usr/share/osrm/profiles/foot.lua" \
-    REGION="europe/france/corse" \
-    NAME="foot-corse" \
+    PROFILE="/usr/share/osrm/profiles/car.lua" \
+    REGION="europe/iceland" \
+    NAME="car-iceland" \
     ADDITIONAL_PARAMS="-c -f" \
     docker-compose -p builder up builder
 
@@ -103,4 +102,3 @@ container:
 You can check if the data has been loaded in the host daemon logs:
 
     grep ${REGION}-${PROFILE} /var/log/daemon.log
-
