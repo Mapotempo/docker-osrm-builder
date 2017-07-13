@@ -10,7 +10,7 @@ services:
       - ADDITIONAL_PARAMS
     volumes:
       - ./osm:/srv/osm
-      - ./data:/srv/osrm/data
+      - ./osrm/data:/srv/osrm/data
       - ./profiles:/srv/osrm/profiles
       - ./scripts:/srv/osrm/regions
     links:
