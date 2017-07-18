@@ -18,8 +18,6 @@ fi
 echo "Building extended DOM OSM file."
 mkdir -p ${WORKSPACE}
 
-local extract_region_full
-
 # Get OSM files
 for extract_region_full in \
     europe/france/guadeloupe \
