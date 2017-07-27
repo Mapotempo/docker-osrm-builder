@@ -24,6 +24,10 @@ Arguments:
 The OSRM file will be generated in the directory /srv/osrm, with the name 'basename-suffix.osrm'.
 EOF
 
+    echo
+    echo "OSRM version"
+    /usr/bin/osrm-extract -v
+
     exit 1
 }
 
