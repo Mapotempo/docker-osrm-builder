@@ -2,7 +2,7 @@ version: '3.3'
 services:
   builder:
     build: .
-    image: mapotempo/osrm-builder:${OSRM_VERSION:-mt-release-5.5-1-1}
+    image: mapotempo/osrm-builder:${OSRM_VERSION:-5.5.1-mt2}
     environment:
       - REGION
       - PROFILE
