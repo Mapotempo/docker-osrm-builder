@@ -3,7 +3,7 @@ FROM debian:stretch
 LABEL maintainer="Mapotempo <contact@mapotempo.com>"
 
 ARG OSRM_VERSION
-ENV OSRM_VERSION ${OSRM_VERSION:-mt-release-5.5-1-1}
+ENV OSRM_VERSION ${OSRM_VERSION:-mt-v5.9.0}
 
 ARG OSRM_REPOSITORY
 ENV OSRM_REPOSITORY ${OSRM_REPOSITORY:-https://github.com/Mapotempo/osrm-backend.git}
@@ -14,7 +14,7 @@ ENV OSRM_REPOSITORY ${OSRM_REPOSITORY:-https://github.com/Mapotempo/osrm-backend
 # Install needed packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends build-essential git cmake \
-        libboost-all-dev libbz2-dev liblua5.1.0-dev libxml2-dev libluabind-dev \
+        libboost-all-dev libbz2-dev liblua5.1.0-dev libxml2-dev \
         libstxxl-dev libosmpbf-dev libprotobuf-dev libtbb-dev ca-certificates && \
     \
 # Clone OSRM Backend
