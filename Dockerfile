@@ -3,7 +3,7 @@ FROM debian:stretch
 LABEL maintainer="Mapotempo <contact@mapotempo.com>"
 
 ARG OSRM_VERSION
-ENV OSRM_VERSION ${OSRM_VERSION:-mt-v5.9.0}
+ENV OSRM_VERSION ${OSRM_VERSION:-mt-v5.10.0}
 
 ARG OSRM_REPOSITORY
 ENV OSRM_REPOSITORY ${OSRM_REPOSITORY:-https://github.com/Mapotempo/osrm-backend.git}
