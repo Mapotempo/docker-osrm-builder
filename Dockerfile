@@ -22,7 +22,7 @@ RUN apt-get update && \
     \
 # Build and install
     mkdir -p osrm-backend/build && cd osrm-backend/build && \
-    cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr .. && make install && \
+    cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_STXXL=On -DCMAKE_INSTALL_PREFIX:PATH=/usr .. && make install && \
 # Install needed LUA libraries
     mkdir -p /usr/share/lua/5.2 && \
     cp -r ../profiles/lib /usr/share/lua/5.2 && \
