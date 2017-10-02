@@ -18,17 +18,17 @@ services:
       - db
 
   db:
-    build: ./postgres
-    image: mapotempo/postgres:9.6
+    build: ./postgis
+    image: mapotempo/postgis:9.6
     environment:
       POSTGRES_DB: osrm
       POSTGRES_USER: osrm
       POSTGRES_PASSWORD: osrm
     volumes:
-      - postgres-9.6:/var/lib/postgres
+      - postgis-9.6:/var/lib/postgres
 
   redis-cache:
     image: redis:${REDIS_VERSION:-3.2-alpine}
 
 volumes:
-  postgres-9.6:
+  postgis-9.6:
