@@ -33,14 +33,6 @@ EOF
 
 build_osm_generic(){
     local REGION_FULL=$1
-    local REGION=$(basename ${REGION_FULL})
-
-    local OSM_ORIGIN=$(readlink -m /srv/osm/${REGION_FULL}/${REGION}-latest.osm.pbf)
-
-    if [ -r ${OSM_ORIGIN} ]; then
-        echo "OSM file for region ${REGION} already exists."
-        return
-    fi
 
     osm-manage.sh ${REGION_FULL} || die "Unable to manage OSM file for region ${REGION_FULL}."
 }
