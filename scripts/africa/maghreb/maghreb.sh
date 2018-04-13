@@ -19,12 +19,11 @@ echo "Building extended OSM file."
 mkdir -p ${WORKSPACE}
 
 AREA="
-    europe/france/guadeloupe
-    europe/france/martinique
-    europe/france/guyane
-    europe/france/reunion
-    europe/france/mayotte
-    australia-oceania/new-caledonia
+    africa/algeria
+    africa/tunisia
+    africa/morocco
+    africa/mauritania
+    africa/libya
 "
 
 READPBF=
