@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Constants
-OSM_BASE_DIR="./osm"
+OSM_BASE_DIR="/srv/osm"
 GEOFABRIK_URL="http://download.geofabrik.de"
 OSM_FR_URL="http://download.openstreetmap.fr/extracts"
 TIMESTAMP="$(date +%Y%m%d)"
