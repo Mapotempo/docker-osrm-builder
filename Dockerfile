@@ -58,7 +58,7 @@ RUN apt-get update && \
 
 # Copy stxxl configuration file.
 COPY stxxl .stxxl
-COPY osrm-build.sh /usr/bin/osrm-build.sh
+COPY entrypoint.sh /usr/bin/entrypoint.sh
 COPY osm-manage.sh /usr/bin/osm-manage.sh
 
 VOLUME /srv/osrm/profiles
@@ -70,4 +70,4 @@ ENV PROFILE ""
 ENV NAME ""
 ENV ADDITIONAL_PARAMS ""
 
-CMD /usr/bin/osrm-build.sh -p ${PROFILE} -r ${REGION} -n ${NAME} ${ADDITIONAL_PARAMS}
+CMD /usr/bin/entrypoint.sh -p ${PROFILE} -r ${REGION} -n ${NAME} ${ADDITIONAL_PARAMS}
