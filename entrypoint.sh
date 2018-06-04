@@ -129,7 +129,11 @@ build_osrm(){
 
     if [ ! -r ${osrm_file} ]; then
         echo "Extracting OSRM data from OSM file ${osm_file} using profile ${profile_path}."
-        /usr/bin/osrm-extract -p ${profile_path} --with-osm-metadata ${osm_file} \
+        /usr/bin/osrm-extract -p ${profile_path} \
+            --with-osm-metadata \
+            --location-dependent-data data/driving_side.geojson \
+            --location-dependent-data data/maxheight.geojson \
+            ${osm_file} \
             || die "Unable to extract data."
     else
         echo "Skipping OSRM data extraction because .osrm file exists."
