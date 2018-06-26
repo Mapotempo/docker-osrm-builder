@@ -8,6 +8,7 @@ services:
       - PROFILE
       - NAME
       - ADDITIONAL_PARAMS
+      - http_proxy
     volumes:
       - ./osm:/srv/osm
       - ./osrm/data:/srv/osrm/data
