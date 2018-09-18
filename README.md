@@ -82,6 +82,8 @@ directory:
     ADDITIONAL_PARAMS="-c -f" \
     docker-compose -p builder up builder
 
+To build with the script, pass arguments to `osrm-build.sh [PROFILE] [REGION] [NAME]`
+
 The data will be generated in `./data`.
 
 Copy the data to another server

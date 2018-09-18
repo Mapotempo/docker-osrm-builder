@@ -2,7 +2,7 @@ version: '3.3'
 services:
   builder:
     build: .
-    image: mapotempo/osrm-builder:${OSRM_VERSION:-5.18.0}
+    image: mapotempo/osrm-builder:${OSRM_VERSION:-5.19.0}
     environment:
       - REGION
       - PROFILE
@@ -14,6 +14,7 @@ services:
       - ./osrm/data:/srv/osrm/data
       - ./profiles:/srv/osrm/profiles
       - ./scripts:/srv/osrm/regions
+      - ./stxxl:/.stxxl
     links:
       - redis-cache
       - db

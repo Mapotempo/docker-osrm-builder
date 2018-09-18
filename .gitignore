@@ -1,0 +1,7 @@
+osrm/data/*.osrm*
+osrm/data/*.osm*
+osm/**/*.osm*
+osm/**/*.txt
+*.lock
+profiles
+!profiles/profile-config.lua
