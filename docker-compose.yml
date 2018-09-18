@@ -14,7 +14,6 @@ services:
       - ./osrm/data:/srv/osrm/data
       - ./profiles:/srv/osrm/profiles
       - ./scripts:/srv/osrm/regions
-      - ./stxxl:/.stxxl
     links:
       - redis-cache
       - db
