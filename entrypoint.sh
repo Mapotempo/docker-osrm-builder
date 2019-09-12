@@ -141,7 +141,7 @@ build_osrm(){
 
     if [ ! -r ${osrm_file}.core ]; then
         echo "Preparing OSRM data for OSM file ${osm_file} using profile ${profile_path}."
-        /usr/bin/osrm-contract ${osrm_file} || die "Unable to prepare data."
+        /usr/bin/osrm-contract ${CONTRACT_OPTIONS} ${osrm_file} || die "Unable to prepare data."
     else
         echo "Skipping OSRM data preparation because .osrm.core file exists."
     fi
