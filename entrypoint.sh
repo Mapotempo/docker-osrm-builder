@@ -129,7 +129,7 @@ build_osrm(){
 
     if [ ! -r ${osrm_file} ]; then
         echo "Extracting OSRM data from OSM file ${osm_file} using profile ${profile_path}."
-        /usr/bin/osrm-extract -p ${profile_path} \
+        /usr/bin/osrm-extract ${EXTRACT_OPTIONS} -p ${profile_path} \
             --with-osm-metadata \
             --location-dependent-data /usr/share/osrm/data/driving_side.geojson \
             --location-dependent-data /usr/share/osrm/data/maxheight.geojson \
