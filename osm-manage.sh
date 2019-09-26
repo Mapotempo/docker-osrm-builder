@@ -39,8 +39,6 @@ die() {
 download_geofabrik() {
     local osm_url=${GEOFABRIK_URL}/${REGION_FULL}-latest.osm.pbf
 
-    mkdir -p ${WORKSPACE}
-
     # and download data.
     echo "Downloading OSM file from Geofabrik for region ${REGION}."
     wget -q ${osm_url} -O ${OSM_FILE}
@@ -50,34 +48,24 @@ download_geofabrik() {
 download_osm_fr() {
     local osm_url=${OSM_FR_URL}/${REGION_FULL}-latest.osm.pbf
 
-    mkdir -p ${WORKSPACE}
-
     echo "Download OSM extract from OpenStreetMap France."
     wget -q ${osm_url} -O ${OSM_FILE}
     [ $? -ne 0 ] && die "Unable to download OSM file extract for region ${REGION}."
 }
-
-manage_geofabrik() {
-    download_geofabrik
-}
-
-manage_osm_fr() {
-    download_osm_fr
-}
-
-# Initialize or update OSM file for region.
 
 if [ -r "${OSM_FILE}" ]; then
     echo "OSM file for region ${REGION} already exists."
     exit 0
 fi
 
+mkdir -p ${WORKSPACE}
+
 echo "Check if region ${REGION_FULL} is managed by Geofabrik."
 curl -sI ${GEOFABRIK_URL}/${REGION_FULL}-updates/ | head -n 1 | grep -q '^HTTP/1.1 200 OK'
 if [ $? -eq 0 ]; then
-    manage_geofabrik
+    download_geofabrik
 else
-    manage_osm_fr
+    download_osm_fr
 fi
 
 echo "Update link for latest OSM file to ${OSM_FILE}."
