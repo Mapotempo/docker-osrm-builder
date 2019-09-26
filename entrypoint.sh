@@ -236,13 +236,13 @@ OSRM_LATEST="${DATADIR}/${BASENAME}-latest.osrm"
 
 # Handle cleanup
 if [ "${CLEANUP_DATA}" -eq 1 ]; then
-    if [ ! "${OSRM_LATEST}" -ef "${OSRM_FILE}" -o "${FORCE}" -eq 1 ]; then
+    if [ ! "${OSRM_LATEST}" -ef "${OSRM_FILE}" ] || [ "${FORCE}" -eq 1 ]; then
         cleanup "${OSRM_LATEST}"
     else
         echo "Not cleaning up ${OSRM_LATEST} because it references the building file. Use -f instead."
     fi
 
-    if [ ! "${OSM_LATEST}" -ef "${OSM_FILE}" -o "${FORCE}" -eq 1 ]; then
+    if [ ! "${OSM_LATEST}" -ef "${OSM_FILE}" ] || [ "${FORCE}" -eq 1 ]; then
         cleanup "${OSM_LATEST}"
     else
         echo "Not cleaning up ${OSM_LATEST} because it references the building file. Use -f instead."
