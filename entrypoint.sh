@@ -82,23 +82,19 @@ build_osm(){
         fi
     fi
 
+    # Here we have ${REGION}-${TIMESTAMP}.osm.pbf in ${REGION} OSRM directory.
 }
 
-cleanup_link() {
+cleanup() {
     local link=$1
     local target=$(readlink -e ${link})
 
-    if [[ -n "${target}" ]]; then
-        local linkdir=$(dirname ${link})
-        local targetdir=$(dirname ${target})
-
-        if [[ "${targetdir}" == "${linkdir}" ]]; then
-            echo "Cleaning target files: ${target}*"
-            rm -vf ${target}*
-        fi
+    if [ -n "${target}" ]; then
+        echo "Cleaning target files: ${target}*"
+        rm -vf ${target}*
     fi
 
-    echo "Cleaning link: ${link}"
+    echo "Cleaning link (if not already deleted): ${link}"
     rm -vf ${link}
 }
 
@@ -106,17 +102,18 @@ prepare_locations() {
     local input=$1
     local output=$2
 
-    if [ ! -r ${output} ]; then
-        echo "Add locations to ways using Osmium on ${input}, writing to ${output}."
-        osmium add-locations-to-ways \
-            --verbose \
-            --keep-untagged-nodes \
-            --ignore-missing-nodes \
-            -F pbf -f pbf \
-            -o ${output} -O ${input} || die "Unable to add locations to ways on OSM file."
-    else
+    if [ -r ${output} ]; then
         echo "OSM with locations already exists."
+        return
     fi
+
+    echo "Add locations to ways using Osmium on ${input}, writing to ${output}."
+    osmium add-locations-to-ways \
+        --verbose \
+        --keep-untagged-nodes \
+        --ignore-missing-nodes \
+        -F pbf -f pbf \
+        -o ${output} -O ${input} || die "Unable to add locations to ways on OSM file."
 }
 
 # Build OSRM data.
@@ -125,26 +122,35 @@ build_osrm(){
     local osm_file=$2
 
     local osrm_file=${osm_file%.osm.pbf}.osrm
-    local osrm_latest=${osrm_file%-*}-latest.osrm
 
-    if [ ! -r ${osrm_file} ]; then
-        echo "Extracting OSRM data from OSM file ${osm_file} using profile ${profile_path}."
-        /usr/bin/osrm-extract ${EXTRACT_OPTIONS} -p ${profile_path} \
-            --with-osm-metadata \
-            --location-dependent-data /usr/share/osrm/data/driving_side.geojson \
-            --location-dependent-data /usr/share/osrm/data/maxheight.geojson \
-            ${osm_file} \
-            || die "Unable to extract data."
-    else
+    if [ -r ${osrm_file} ]; then
         echo "Skipping OSRM data extraction because .osrm file exists."
+        return
     fi
 
-    if [ ! -r ${osrm_file}.core ]; then
-        echo "Preparing OSRM data for OSM file ${osm_file} using profile ${profile_path}."
-        /usr/bin/osrm-contract ${CONTRACT_OPTIONS} ${osrm_file} || die "Unable to prepare data."
-    else
-        echo "Skipping OSRM data preparation because .osrm.core file exists."
+    echo "Extracting OSRM data from OSM file ${osm_file} using profile ${profile_path}."
+    /usr/bin/osrm-extract ${EXTRACT_OPTIONS} -p ${profile_path} \
+        --with-osm-metadata \
+        --location-dependent-data /usr/share/osrm/data/driving_side.geojson \
+        --location-dependent-data /usr/share/osrm/data/maxheight.geojson \
+        ${osm_file}
+
+    if [ $? -ne 0 ]; then
+        echo Extract failed, cleanup OSRM data and exit.
+        rm -rf ${osrm_file}*
+        exit 1
     fi
+
+    echo "Preparing OSRM data for OSM file ${osm_file} using profile ${profile_path}."
+    /usr/bin/osrm-contract ${CONTRACT_OPTIONS} ${osrm_file}
+
+    if [ $? -ne 0 ]; then
+        echo Contract failed, cleanup OSRM data and exit.
+        rm -rf ${osrm_file}*
+        exit 1
+    fi
+
+    # Here we have ${PROFLE}-${TIMESTAMP}.osrm*
 }
 
 # Global common variables
@@ -225,13 +231,13 @@ OSRM_LATEST=${DATADIR}/${BASENAME}-latest.osrm
 # Handle cleanup
 if [ "${CLEANUP_DATA}" -eq 1 ]; then
     if [ ! "${OSRM_LATEST}" -ef "${OSRM_FILE}" -o ${FORCE} -eq 1 ]; then
-        cleanup_link ${OSRM_LATEST}
+        cleanup ${OSRM_LATEST}
     else
         echo "Not cleaning up ${OSRM_LATEST} because it references the building file. Use -f instead."
     fi
 
     if [ ! "${OSM_LATEST}" -ef "${OSM_FILE}" -o ${FORCE} -eq 1 ]; then
-        cleanup_link ${OSM_LATEST}
+        cleanup ${OSM_LATEST}
     else
         echo "Not cleaning up ${OSM_LATEST} because it references the building file. Use -f instead."
     fi
@@ -239,13 +245,29 @@ fi
 
 # Fetch latest OSM data.
 build_osm ${REGION_FULL} ${OSM_FILE}
+# Here we have ${REGION}-${TIMESTAMP}.osm.pbf in ${REGION} OSRM directory.
+
+OSM_OLD=$(readlink -e ${OSM_LATEST})
 
 echo "Linking latest OSM to ${OSM_FILE}."
 ln -sf --relative ${OSM_FILE} ${OSM_LATEST}
 
+echo "Cleanup previous OSM data."
+if [ ! ${OSM_OLD} -ef ${OSM_LATEST} ]; then
+    cleanup ${OSM_OLD}
+fi
+
 # Build OSRM files
 build_osrm ${PROFILE_PATH} ${OSM_FILE}
+
+# Get old OSRM file.
+OSRM_OLD=$(readlink -e ${OSRM_LATEST})
 
 # Create a link to the latest OSRM for the next start
 echo "Linking latest OSRM to ${OSRM_FILE}."
 ln -sf --relative ${OSRM_FILE} ${OSRM_LATEST}
+
+echo "Cleanup previous OSRM data"
+if [ ! ${OSRM_OLD} -ef ${OSRM_LATEST} ]; then
+    cleanup ${OSRM_OLD}
+fi
